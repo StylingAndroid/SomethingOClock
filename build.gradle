@@ -18,11 +18,8 @@ ext {
     playServicesVersion = '8.4.0'
     supportLibraryVersion = '23.2.1'
     wearableVersion = '1.3.0'
-    appMajor = 0
-    appMinor = 9
-    appPatch = 0
-    appVersionCode = (appMajor * 100000) + (appMinor * 1000) + appPatch
-    appVersionName = appMajor + '.' + appMinor + '.' + appPatch
+    appVersionCode = 1
+    appVersionName = "1"
 }
 
 allprojects {
