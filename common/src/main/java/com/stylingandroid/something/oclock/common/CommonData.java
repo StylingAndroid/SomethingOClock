@@ -1,4 +1,4 @@
-package com.stylingandroid.something.oclock;
+package com.stylingandroid.something.oclock.common;
 
 import android.content.Context;
 import android.content.res.Resources;

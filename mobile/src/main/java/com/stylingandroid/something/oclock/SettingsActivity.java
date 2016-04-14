@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
 import com.stylingandroid.something.oclock.adapter.WordClickHandler;
 import com.stylingandroid.something.oclock.adapter.WordsAdapter;
+import com.stylingandroid.something.oclock.common.CommonData;
 import com.stylingandroid.something.oclock.data.DataClient;
 import com.stylingandroid.something.oclock.data.DataClientLoader;
 

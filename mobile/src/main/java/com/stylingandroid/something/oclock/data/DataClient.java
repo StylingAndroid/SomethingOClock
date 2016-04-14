@@ -10,7 +10,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.stylingandroid.something.oclock.CommonData;
+import com.stylingandroid.something.oclock.common.CommonData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
