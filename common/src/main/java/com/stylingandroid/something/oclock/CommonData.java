@@ -3,8 +3,6 @@ package com.stylingandroid.something.oclock;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.stylingandroid.customoclock.common.R;
-
 public final class CommonData {
 
     public static final String KEY_WORD = "word";
