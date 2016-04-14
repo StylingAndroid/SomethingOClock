@@ -1,0 +1,14 @@
+<resources>
+  <string name="something">something</string>
+  <string name="food">food</string>
+  <string name="burrito">burrito</string>
+  <string name="pizza">pizza</string>
+  <string name="burger">burger</string>
+  <string name="chicken">chicken</string>
+  <string name="booze">booze</string>
+  <string name="beer">beer</string>
+  <string name="wine">wine</string>
+  <string name="whisky">whisky</string>
+  <string name="go_home">go home</string>
+  <string name="sleep">sleep</string>
+</resources>

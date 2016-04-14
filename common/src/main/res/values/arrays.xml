@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string-array name="default_words">
+    <item>@string/something</item>
+    <item>@string/food</item>
+    <item>@string/burrito</item>
+    <item>@string/pizza</item>
+    <item>@string/burger</item>
+    <item>@string/chicken</item>
+    <item>@string/booze</item>
+    <item>@string/beer</item>
+    <item>@string/wine</item>
+    <item>@string/whisky</item>
+    <item>@string/go_home</item>
+    <item>@string/sleep</item>
+  </string-array>
+
+</resources>
