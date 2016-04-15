@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
-import com.stylingandroid.something.oclock.R;
+import com.stylingandroid.something.oclock.common.CommonData;
 
 import java.util.Collections;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class DataClientLoader implements GoogleApiClient.OnConnectionFailedListe
     }
 
     private void createConnection(FragmentActivity activity) {
-        String[] defaultWords = activity.getResources().getStringArray(R.array.default_words);
+        String[] defaultWords = CommonData.getTimeStrings(activity);
         ConnectionCallbacks connectionCallbacks = new ConnectionCallbacks(defaultWords);
         googleApiClient = new GoogleApiClient.Builder(activity)
                 .addConnectionCallbacks(connectionCallbacks)
