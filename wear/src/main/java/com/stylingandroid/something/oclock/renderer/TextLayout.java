@@ -16,7 +16,7 @@ public class TextLayout {
     private final int textColour;
 
     public static TextLayout newInstance(@ColorInt int textColour) {
-        List<String> lines = Arrays.asList(DEFAULT_TEXT);
+        List<String> lines = new ArrayList<>(Arrays.asList(DEFAULT_TEXT));
         List<Text> texts = new ArrayList<>();
         return new TextLayout(lines, texts, textColour);
     }
@@ -59,6 +59,12 @@ public class TextLayout {
         for (Text text : texts) {
             text.setAntiAlias(antiAlias);
         }
+    }
+
+    public void setTimeText(String timeText) {
+        lines.remove(0);
+        lines.add(0, timeText);
+        invalidateLayout();
     }
 
     private TextPositioner[] constructPositioners(int width) {

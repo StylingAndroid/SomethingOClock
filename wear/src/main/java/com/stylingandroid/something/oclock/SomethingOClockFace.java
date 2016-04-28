@@ -4,13 +4,28 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.Wearable;
+import com.stylingandroid.something.oclock.common.CommonData;
+import com.stylingandroid.something.oclock.data.DataMapResult;
+import com.stylingandroid.something.oclock.data.LocalDataMap;
+import com.stylingandroid.something.oclock.data.UriResult;
 import com.stylingandroid.something.oclock.renderer.InsetCalculator;
 import com.stylingandroid.something.oclock.renderer.TextLayout;
 
@@ -25,6 +40,8 @@ public class SomethingOClockFace extends CanvasWatchFaceService {
         private boolean ambient;
         private InsetCalculator insetCalculator;
         private TextLayout textLayout;
+
+        private GoogleApiClient googleApiClient;
 
         private boolean lowBitAmbient;
 
@@ -48,6 +65,25 @@ public class SomethingOClockFace extends CanvasWatchFaceService {
             int textColour = ContextCompat.getColor(context, R.color.digital_text);
 
             textLayout = TextLayout.newInstance(textColour);
+
+            googleApiClient = new GoogleApiClient.Builder(SomethingOClockFace.this)
+                    .addConnectionCallbacks(googleConnectionCallbacks)
+                    .addApi(Wearable.API)
+                    .build();
+        }
+
+        @Override
+        public void onVisibilityChanged(boolean visible) {
+            super.onVisibilityChanged(visible);
+
+            if (visible) {
+                googleApiClient.connect();
+            } else {
+                if (googleApiClient != null && googleApiClient.isConnected()) {
+                    Wearable.DataApi.removeListener(googleApiClient, dataListener);
+                    googleApiClient.disconnect();
+                }
+            }
         }
 
         @Override
@@ -88,6 +124,68 @@ public class SomethingOClockFace extends CanvasWatchFaceService {
                 textLayout.invalidateLayout();
             }
             textLayout.draw(canvas, insetBounds);
+        }
+
+        private GoogleApiClient.ConnectionCallbacks googleConnectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+                final LocalDataMap localDataMap = LocalDataMap.newInstance(SomethingOClockFace.this, googleApiClient);
+                fetchConfigDataMap(localDataMap);
+                localDataMap.getLocalStorageUri(new ResultCallback<UriResult>() {
+                    @Override
+                    public void onResult(@NonNull UriResult uriResult) {
+                        Wearable.DataApi.addListener(googleApiClient, dataListener, uriResult.getUri(), DataApi.FILTER_LITERAL);
+                    }
+                });
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+                //NO-OP
+            }
+        };
+
+        public void fetchConfigDataMap(LocalDataMap localDataMap) {
+            localDataMap.fetchConfig(new ResultCallback<DataMapResult>() {
+                @Override
+                public void onResult(@NonNull DataMapResult dataMapResult) {
+                    if (dataMapResult.getStatus().isSuccess()) {
+                        DataMap dataMap = dataMapResult.getDataMap();
+                        decode(dataMap);
+                    }
+                }
+            });
+        }
+
+        private DataApi.DataListener dataListener = new DataApi.DataListener() {
+            @Override
+            public void onDataChanged(DataEventBuffer dataEventBuffer) {
+                for (DataEvent event : dataEventBuffer) {
+                    Uri uri = event.getDataItem().getUri();
+                    if (uri.getPath().equals(LocalDataMap.PATH_WORDS)) {
+                        decode(event.getDataItem());
+                    }
+                }
+            }
+        };
+
+        private void decode(DataItem dataItem) {
+            Uri uri = dataItem.getUri();
+            String path = uri.getPath();
+            if (path.equals(LocalDataMap.PATH_WORDS)) {
+                DataMap dataMap = LocalDataMap.dataMapFrom(dataItem);
+                decode(dataMap);
+            }
+        }
+
+        private void decode(DataMap dataMap) {
+            String word = dataMap.getString(CommonData.KEY_WORD);
+            updateWord(word);
+        }
+
+        private void updateWord(String word) {
+            textLayout.setTimeText(word);
+            invalidate();
         }
     }
 }
