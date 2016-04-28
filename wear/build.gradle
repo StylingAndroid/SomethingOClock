@@ -21,6 +21,7 @@ android {
 }
 
 dependencies {
+    compile project(':common')
     compile "com.google.android.support:wearable:${wearableVersion}"
     compile "com.google.android.gms:play-services-wearable:${playServicesVersion}"
 }
