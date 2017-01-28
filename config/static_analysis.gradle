@@ -27,7 +27,7 @@ task checkstyle(type: Checkstyle) {
     classpath = files()
 }
 
-task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+task findbugs(type: FindBugs, dependsOn: assemble) {
     ignoreFailures = true
     classes = fileTree("$projectDir/build/intermediates/classes/debug/")
     source = fileTree("$projectDir/src/*/java/")
